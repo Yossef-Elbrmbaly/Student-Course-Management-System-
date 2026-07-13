@@ -1,4 +1,5 @@
 <?php
+var_dump("Hello, World!");
 
 require_once '../config/Database.php';
 
