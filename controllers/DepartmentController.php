@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers;
+namespace controllers;
 
-use Models\Department;
+use models\Department;
 
 class DepartmentController {
     public function __construct(private Department $departmentModel) {}

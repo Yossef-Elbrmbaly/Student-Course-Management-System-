@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers;
+namespace controllers;
 
-use Models\Course;
+use models\Course;
 
 class CourseController {
     public function __construct(private Course $courseModel) {}

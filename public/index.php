@@ -12,16 +12,16 @@ require_once '../controllers/DepartmentController.php';
 require_once '../controllers/CourseController.php';
 require_once '../controllers/EnrollmentController.php';
 
-use Config\Database;
-use Models\Student;
-use Models\Department;
-use Models\Course;
-use Models\Enrollment;
+use config\Database;
+use models\Student;
+use models\Department;
+use models\Course;
+use models\Enrollment;
 
-use Controllers\StudentController;
-use Controllers\DepartmentController;
-use Controllers\CourseController;
-use Controllers\EnrollmentController;
+use controllers\StudentController;
+use controllers\DepartmentController;
+use controllers\CourseController;
+use controllers\EnrollmentController;
 
 $database = new Database();
 

@@ -1,5 +1,5 @@
 <?php
-namespace Models;
+namespace models;
 use PDO;
 
 class Student {

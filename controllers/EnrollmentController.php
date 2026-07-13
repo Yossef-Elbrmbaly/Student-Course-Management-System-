@@ -1,10 +1,10 @@
 <?php
 
-namespace Controllers;
+namespace controllers;
 
-use Models\Enrollment;
-use Models\Student;
-use Models\Course;
+use models\Enrollment;
+use models\Student;
+use models\Course;
 
 class EnrollmentController
 {
