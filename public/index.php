@@ -25,6 +25,12 @@ use Controllers\CourseController;
 use Controllers\EnrollmentController;
 
 $database = new Database();
+
+if ($database->checkConnection()) {
+    die("Database connection problem: Database instance is null.");
+}else {
+    echo "Database connection false.";
+}
 $connection = $database->connect();
 
 $page = $_GET['page'] ?? 'students';
