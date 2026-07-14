@@ -7,16 +7,14 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use App\Config\Database;
-
-use App\Models\Student;
-use App\Models\Department;
-use App\Models\Course;
-use App\Models\Enrollment;
-
-use App\Controllers\StudentController;
-use App\Controllers\DepartmentController;
 use App\Controllers\CourseController;
+use App\Controllers\DepartmentController;
 use App\Controllers\EnrollmentController;
+use App\Controllers\StudentController;
+use App\Models\Course;
+use App\Models\Department;
+use App\Models\Enrollment;
+use App\Models\Student;
 
 $database = new Database();
 
@@ -43,7 +41,7 @@ if ($page === 'departments') {
     } else {
         $departmentController->index();
     }
-}else if ($page === 'courses') {
+} elseif ($page === 'courses') {
 
     $courseModel = new Course($connection);
     $courseController = new CourseController($courseModel);
@@ -61,7 +59,7 @@ if ($page === 'departments') {
     } else {
         $courseController->index();
     }
-}elseif ($page === 'enrollments') {
+} elseif ($page === 'enrollments') {
 
     $enrollmentModel = new Enrollment($connection);
     $studentModel = new Student($connection);
@@ -83,7 +81,7 @@ if ($page === 'departments') {
         $enrollmentController->index();
     }
 
-}else {
+} else {
     $studentModel = new Student($connection);
     $departmentModel = new Department($connection);
     $enrollmentModel = new Enrollment($connection);
@@ -107,7 +105,7 @@ if ($page === 'departments') {
         $studentController->delete();
     } elseif ($action === 'show') {
         $studentController->show();
-    }else {
+    } else {
         $studentController->index();
     }
 }

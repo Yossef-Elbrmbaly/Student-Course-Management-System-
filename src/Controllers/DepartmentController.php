@@ -4,19 +4,25 @@ namespace App\Controllers;
 
 use App\Models\Department;
 
-class DepartmentController {
-    public function __construct(private Department $departmentModel) {}
+class DepartmentController
+{
+    public function __construct(private Department $departmentModel)
+    {
+    }
 
-    public function index() {
+    public function index()
+    {
         $departments = $this->departmentModel->getAll();
         require_once __DIR__ . '/../views/departments/index.php';
     }
 
-    public function create() {
+    public function create()
+    {
         require_once __DIR__ . '/../views/departments/create.php';
     }
 
-    public function store() {
+    public function store()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
@@ -30,7 +36,8 @@ class DepartmentController {
         }
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = (int) ($_GET['id'] ?? 0);
 
         $department = $this->departmentModel->getById($id);
@@ -43,7 +50,8 @@ class DepartmentController {
         $this->redirect();
     }
 
-    public function update() {
+    public function update()
+    {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
@@ -58,7 +66,8 @@ class DepartmentController {
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         $id = (int) ($_GET['id'] ?? 0);
 
         if ($id > 0) {
@@ -68,7 +77,8 @@ class DepartmentController {
         $this->redirect();
     }
 
-    private function redirect() {
+    private function redirect()
+    {
         header('Location: index.php?page=departments');
         exit;
     }

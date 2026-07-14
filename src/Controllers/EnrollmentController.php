@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\Student;
-use App\Models\Department;
-use App\Models\Enrollment;
 use App\Models\Course;
+use App\Models\Enrollment;
+use App\Models\Student;
 
 class EnrollmentController
 {

@@ -4,19 +4,25 @@ namespace App\Controllers;
 
 use App\Models\Course;
 
-class CourseController {
-    public function __construct(private Course $courseModel) {}
+class CourseController
+{
+    public function __construct(private Course $courseModel)
+    {
+    }
 
-    public function index() {
+    public function index()
+    {
         $courses = $this->courseModel->getAll();
         require_once __DIR__ . '/../views/courses/index.php';
     }
 
-    public function create() {
+    public function create()
+    {
         require_once __DIR__ . '/../views/courses/create.php';
     }
 
-    public function store() {
+    public function store()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'] ?? '';
             $code = $_POST['code'] ?? '';
@@ -28,7 +34,8 @@ class CourseController {
         }
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         $course = $this->courseModel->getById($id);
         if ($course) {
@@ -38,7 +45,8 @@ class CourseController {
         }
     }
 
-    public function update() {
+    public function update()
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
             $name = $_POST['name'] ?? '';
@@ -51,7 +59,8 @@ class CourseController {
         }
     }
 
-    public function delete() {
+    public function delete()
+    {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         if ($id > 0) {
             $this->courseModel->delete($id);
@@ -59,7 +68,8 @@ class CourseController {
         $this->redirect();
     }
 
-    private function redirect() {
+    private function redirect()
+    {
         header('Location: index.php?page=courses');
         exit;
     }

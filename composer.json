@@ -11,5 +11,11 @@
             "email": "149072029+Yossef-Elbrmbaly@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "squizlabs/php_codesniffer": "^4"
+    }
 }

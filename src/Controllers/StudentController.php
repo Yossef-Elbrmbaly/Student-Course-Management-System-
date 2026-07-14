@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\Student;
 use App\Models\Department;
 use App\Models\Enrollment;
+use App\Models\Student;
 
 class StudentController
 {
@@ -12,7 +12,6 @@ class StudentController
         private Student $studentModel,
         private Department $departmentModel,
         private Enrollment $enrollmentModel
-
     ) {
     }
 
@@ -23,7 +22,7 @@ class StudentController
         require_once __DIR__ . '/../views/students/index.php';
     }
 
-        public function show()
+    public function show()
     {
         $id = (int) ($_GET['id'] ?? 0);
         $student = $this->studentModel->getById($id);
@@ -61,7 +60,7 @@ class StudentController
         $department_id = (int) ($_POST['department_id'] ?? 0);
 
         if (empty($name) || empty($email)) {
-            echo "Name and Email are required fields.";
+            echo 'Name and Email are required fields.';
             return;
         }
 
@@ -97,7 +96,7 @@ class StudentController
         $department_id = (int) ($_POST['department_id'] ?? 0);
 
         if ($id <= 0 || empty($name) || empty($email)) {
-            echo "Invalid data provided.";
+            echo 'Invalid data provided.';
             return;
         }
 
