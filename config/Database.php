@@ -10,8 +10,8 @@ class Database
     private string $host = "db.fr-pari1.bengt.wasmernet.com";
     private string $port = "10272";
     private string $db_name = "DB_NAME";
-    private string $username = "user_99fbe122";
-    private string $password = "pw_FeJluL9CUR95XiYE6ODwRAUfUJZIE4cS";
+    private string $username = "user_8dcb59ce";
+    private string $password = "pw_3kllsUENAPJIOTyYvG1MDoYAnqlESWSI";
 
     public ?PDO $conn = null;
 
