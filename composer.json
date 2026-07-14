@@ -1,0 +1,15 @@
+{
+    "name": "elbrmbalylap/student_system",
+    "autoload": {
+        "psr-4": {
+            "Elbrmbalylap\\StudentSystem\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Yossef-Elbrmbaly",
+            "email": "149072029+Yossef-Elbrmbaly@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}

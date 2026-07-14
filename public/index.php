@@ -3,17 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../config/Database.php';
-
-require_once '../models/Student.php';
-require_once '../models/Department.php';
-require_once '../models/Course.php';
-require_once '../models/Enrollment.php';
-
-require_once '../controllers/StudentController.php';
-require_once '../controllers/DepartmentController.php';
-require_once '../controllers/CourseController.php';
-require_once '../controllers/EnrollmentController.php';
+require_once '../vendor/autoload.php';
 
 use config\Database;
 use models\Student;
