@@ -1,10 +1,10 @@
 <?php
 
-namespace controllers;
+namespace App\Controllers;
 
-use models\Student;
-use models\Department;
-use models\Enrollment;
+use App\Models\Student;
+use App\Models\Department;
+use App\Models\Enrollment;
 
 class StudentController
 {
@@ -20,7 +20,7 @@ class StudentController
     {
         $students = $this->studentModel->getAll();
 
-        require_once '../views/students/index.php';
+        require_once __DIR__ . '/../views/students/index.php';
     }
 
         public function show()
@@ -39,14 +39,14 @@ class StudentController
 
         $courses = $this->enrollmentModel->getStudentCourses($id);
 
-        require_once '../views/students/show.php';
+        require_once __DIR__ . '/../views/students/show.php';
     }
 
     public function create()
     {
         $departments = $this->departmentModel->getAll();
 
-        require_once '../views/students/create.php';
+        require_once __DIR__ . '/../views/students/create.php';
     }
 
     public function store()
@@ -81,7 +81,7 @@ class StudentController
 
         $departments = $this->departmentModel->getAll();
 
-        require_once '../views/students/edit.php';
+        require_once __DIR__ . '/../views/students/edit.php';
     }
 
     public function update()

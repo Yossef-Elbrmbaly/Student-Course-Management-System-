@@ -1,19 +1,19 @@
 <?php
 
-namespace controllers;
+namespace App\Controllers;
 
-use models\Department;
+use App\Models\Department;
 
 class DepartmentController {
     public function __construct(private Department $departmentModel) {}
 
     public function index() {
         $departments = $this->departmentModel->getAll();
-        require_once '../views/departments/index.php';
+        require_once __DIR__ . '/../views/departments/index.php';
     }
 
     public function create() {
-        require_once '../views/departments/create.php';
+        require_once __DIR__ . '/../views/departments/create.php';
     }
 
     public function store() {
@@ -36,7 +36,7 @@ class DepartmentController {
         $department = $this->departmentModel->getById($id);
 
         if ($department) {
-            require_once '../views/departments/edit.php';
+            require_once __DIR__ . '/../views/departments/edit.php';
             return;
         }
 

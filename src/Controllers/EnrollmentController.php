@@ -1,10 +1,11 @@
 <?php
 
-namespace controllers;
+namespace App\Controllers;
 
-use models\Enrollment;
-use models\Student;
-use models\Course;
+use App\Models\Student;
+use App\Models\Department;
+use App\Models\Enrollment;
+use App\Models\Course;
 
 class EnrollmentController
 {
@@ -19,7 +20,7 @@ class EnrollmentController
     {
         $enrollments = $this->enrollmentModel->getAll();
 
-        require_once '../views/enrollments/index.php';
+        require_once __DIR__ . '/../views/enrollments/index.php';
     }
 
     public function create()
@@ -27,7 +28,7 @@ class EnrollmentController
         $students = $this->studentModel->getAll();
         $courses = $this->courseModel->getAll();
 
-        require_once '../views/enrollments/create.php';
+        require_once __DIR__ . '/../views/enrollments/create.php';
     }
 
     public function store()

@@ -1,20 +1,22 @@
 <?php
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use config\Database;
-use models\Student;
-use models\Department;
-use models\Course;
-use models\Enrollment;
+use App\Config\Database;
 
-use controllers\StudentController;
-use controllers\DepartmentController;
-use controllers\CourseController;
-use controllers\EnrollmentController;
+use App\Models\Student;
+use App\Models\Department;
+use App\Models\Course;
+use App\Models\Enrollment;
+
+use App\Controllers\StudentController;
+use App\Controllers\DepartmentController;
+use App\Controllers\CourseController;
+use App\Controllers\EnrollmentController;
 
 $database = new Database();
 

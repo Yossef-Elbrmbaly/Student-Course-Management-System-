@@ -1,19 +1,19 @@
 <?php
 
-namespace controllers;
+namespace App\Controllers;
 
-use models\Course;
+use App\Models\Course;
 
 class CourseController {
     public function __construct(private Course $courseModel) {}
 
     public function index() {
         $courses = $this->courseModel->getAll();
-        require_once '../views/courses/index.php';
+        require_once __DIR__ . '/../views/courses/index.php';
     }
 
     public function create() {
-        require_once '../views/courses/create.php';
+        require_once __DIR__ . '/../views/courses/create.php';
     }
 
     public function store() {
@@ -32,7 +32,7 @@ class CourseController {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         $course = $this->courseModel->getById($id);
         if ($course) {
-            require_once '../views/courses/edit.php';
+            require_once __DIR__ . '/../views/courses/edit.php';
         } else {
             $this->redirect();
         }

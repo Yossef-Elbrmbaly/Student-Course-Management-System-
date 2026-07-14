@@ -2,7 +2,7 @@
     "name": "elbrmbalylap/student_system",
     "autoload": {
         "psr-4": {
-            "Elbrmbalylap\\StudentSystem\\": "src/"
+            "App\\": "src/"
         }
     },
     "authors": [
