@@ -2,22 +2,22 @@
 
 namespace App\Controllers;
 
-use App\Models\Department;
-use App\Models\Enrollment;
-use App\Models\Student;
+use App\Contracts\DepartmentRepositoryInterface;
+use App\Contracts\EnrollmentRepositoryInterface;
+use App\Contracts\StudentRepositoryInterface;
 
 class StudentController
 {
     public function __construct(
-        private Student $studentModel,
-        private Department $departmentModel,
-        private Enrollment $enrollmentModel
+        private StudentRepositoryInterface $studentRepository,
+        private DepartmentRepositoryInterface $departmentRepository,
+        private EnrollmentRepositoryInterface $enrollmentRepository
     ) {
     }
 
     public function index()
     {
-        $students = $this->studentModel->getAll();
+        $students = $this->studentRepository->getAll();
 
         require_once __DIR__ . '/../views/students/index.php';
     }
@@ -25,7 +25,7 @@ class StudentController
     public function show()
     {
         $id = (int) ($_GET['id'] ?? 0);
-        $student = $this->studentModel->getById($id);
+        $student = $this->studentRepository->getById($id);
 
         if (!$student) {
             $this->redirect();
@@ -33,17 +33,17 @@ class StudentController
 
         $department = null;
         if (!empty($student['department_id'])) {
-            $department = $this->departmentModel->getById((int) $student['department_id']);
+            $department = $this->departmentRepository->getById((int) $student['department_id']);
         }
 
-        $courses = $this->enrollmentModel->getStudentCourses($id);
+        $courses = $this->enrollmentRepository->getStudentCourses($id);
 
         require_once __DIR__ . '/../views/students/show.php';
     }
 
     public function create()
     {
-        $departments = $this->departmentModel->getAll();
+        $departments = $this->departmentRepository->getAll();
 
         require_once __DIR__ . '/../views/students/create.php';
     }
@@ -72,13 +72,13 @@ class StudentController
     public function edit()
     {
         $id = (int) ($_GET['id'] ?? 0);
-        $student = $this->studentModel->getById($id);
+        $student = $this->studentRepository->getById($id);
 
         if (!$student) {
             $this->redirect();
         }
 
-        $departments = $this->departmentModel->getAll();
+        $departments = $this->departmentRepository->getAll();
 
         require_once __DIR__ . '/../views/students/edit.php';
     }
@@ -110,7 +110,7 @@ class StudentController
         $id = (int) ($_GET['id'] ?? 0);
 
         if ($id > 0) {
-            $this->studentModel->delete($id);
+            $this->studentRepository->delete($id);
         }
 
         $this->redirect();

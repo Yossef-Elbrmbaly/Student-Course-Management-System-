@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Models\Course;
+use App\Contracts\CourseRepositoryInterface;
 
 class CourseController
 {
-    public function __construct(private Course $courseModel)
+    public function __construct(private CourseRepositoryInterface $courseRepository)
     {
     }
 
     public function index()
     {
-        $courses = $this->courseModel->getAll();
+        $courses = $this->courseRepository->getAll();
         require_once __DIR__ . '/../views/courses/index.php';
     }
 
@@ -28,7 +28,7 @@ class CourseController
             $code = $_POST['code'] ?? '';
 
             if (!empty($name) && !empty($code)) {
-                $this->courseModel->create($name, $code, $credits);
+                $this->courseRepository->create($name, $code, $credits);
                 $this->redirect();
             }
         }
@@ -37,7 +37,7 @@ class CourseController
     public function edit()
     {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        $course = $this->courseModel->getById($id);
+        $course = $this->courseRepository->getById($id);
         if ($course) {
             require_once __DIR__ . '/../views/courses/edit.php';
         } else {
@@ -53,7 +53,7 @@ class CourseController
             $code = $_POST['code'] ?? '';
 
             if ($id > 0 && !empty($name) && !empty($code)) {
-                $this->courseModel->update($id, $name, $code, $credits);
+                $this->courseRepository->update($id, $name, $code, $credits);
                 $this->redirect();
             }
         }
@@ -63,7 +63,7 @@ class CourseController
     {
         $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
         if ($id > 0) {
-            $this->courseModel->delete($id);
+            $this->courseRepository->delete($id);
         }
         $this->redirect();
     }

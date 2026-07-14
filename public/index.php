@@ -11,10 +11,10 @@ use App\Controllers\CourseController;
 use App\Controllers\DepartmentController;
 use App\Controllers\EnrollmentController;
 use App\Controllers\StudentController;
-use App\Models\Course;
-use App\Models\Department;
-use App\Models\Enrollment;
-use App\Models\Student;
+use App\Repositories\CourseRepository;
+use App\Repositories\DepartmentRepository;
+use App\Repositories\EnrollmentRepository;
+use App\Repositories\StudentRepository;
 
 $database = new Database();
 
@@ -25,8 +25,8 @@ $action = $_GET['action'] ?? 'index';
 
 if ($page === 'departments') {
 
-    $departmentModel = new Department($connection);
-    $departmentController = new DepartmentController($departmentModel);
+    $departmentRepository = new DepartmentRepository($connection);
+    $departmentController = new DepartmentController($departmentRepository);
 
     if ($action === 'create') {
         $departmentController->create();
@@ -43,8 +43,8 @@ if ($page === 'departments') {
     }
 } elseif ($page === 'courses') {
 
-    $courseModel = new Course($connection);
-    $courseController = new CourseController($courseModel);
+    $courseRepository = new CourseRepository($connection);
+    $courseController = new CourseController($courseRepository);
 
     if ($action === 'create') {
         $courseController->create();
@@ -61,14 +61,14 @@ if ($page === 'departments') {
     }
 } elseif ($page === 'enrollments') {
 
-    $enrollmentModel = new Enrollment($connection);
-    $studentModel = new Student($connection);
-    $courseModel = new Course($connection);
+    $enrollmentRepository = new EnrollmentRepository($connection);
+    $studentRepository = new StudentRepository($connection);
+    $courseRepository = new CourseRepository($connection);
 
     $enrollmentController = new EnrollmentController(
-        $enrollmentModel,
-        $studentModel,
-        $courseModel
+        $enrollmentRepository,
+        $studentRepository,
+        $courseRepository
     );
 
     if ($action === 'create') {
@@ -82,15 +82,15 @@ if ($page === 'departments') {
     }
 
 } else {
-    $studentModel = new Student($connection);
-    $departmentModel = new Department($connection);
-    $enrollmentModel = new Enrollment($connection);
+    $studentRepository = new StudentRepository($connection);
+    $departmentRepository = new DepartmentRepository($connection);
+    $enrollmentRepository = new EnrollmentRepository($connection);
 
 
     $studentController = new StudentController(
-        $studentModel,
-        $departmentModel,
-        $enrollmentModel
+        $studentRepository,
+        $departmentRepository,
+        $enrollmentRepository
     );
 
     if ($action === 'create') {

@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Models\Department;
+use App\Contracts\DepartmentRepositoryInterface;
 
 class DepartmentController
 {
-    public function __construct(private Department $departmentModel)
+    public function __construct(private DepartmentRepositoryInterface $departmentRepository)
     {
     }
 
     public function index()
     {
-        $departments = $this->departmentModel->getAll();
+        $departments = $this->departmentRepository->getAll();
         require_once __DIR__ . '/../views/departments/index.php';
     }
 
@@ -30,7 +30,7 @@ class DepartmentController
         $name = $_POST['name'] ?? '';
 
         if (!empty($name)) {
-            $this->departmentModel->create($name);
+            $this->departmentRepository->create($name);
 
             $this->redirect();
         }
@@ -40,7 +40,7 @@ class DepartmentController
     {
         $id = (int) ($_GET['id'] ?? 0);
 
-        $department = $this->departmentModel->getById($id);
+        $department = $this->departmentRepository->getById($id);
 
         if ($department) {
             require_once __DIR__ . '/../views/departments/edit.php';
@@ -60,7 +60,7 @@ class DepartmentController
         $name = $_POST['name'] ?? '';
 
         if ($id > 0 && !empty($name)) {
-            $this->departmentModel->update($id, $name);
+            $this->departmentRepository->update($id, $name);
 
             $this->redirect();
         }
@@ -71,7 +71,7 @@ class DepartmentController
         $id = (int) ($_GET['id'] ?? 0);
 
         if ($id > 0) {
-            $this->departmentModel->delete($id);
+            $this->departmentRepository->delete($id);
         }
 
         $this->redirect();

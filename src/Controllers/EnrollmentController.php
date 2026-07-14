@@ -2,30 +2,30 @@
 
 namespace App\Controllers;
 
-use App\Models\Course;
-use App\Models\Enrollment;
-use App\Models\Student;
+use App\Contracts\CourseRepositoryInterface;
+use App\Contracts\EnrollmentRepositoryInterface;
+use App\Contracts\StudentRepositoryInterface;
 
 class EnrollmentController
 {
     public function __construct(
-        private Enrollment $enrollmentModel,
-        private Student $studentModel,
-        private Course $courseModel
+        private EnrollmentRepositoryInterface $enrollmentRepository,
+        private StudentRepositoryInterface $studentRepository,
+        private CourseRepositoryInterface $courseRepository
     ) {
     }
 
     public function index()
     {
-        $enrollments = $this->enrollmentModel->getAll();
+        $enrollments = $this->enrollmentRepository->getAll();
 
         require_once __DIR__ . '/../views/enrollments/index.php';
     }
 
     public function create()
     {
-        $students = $this->studentModel->getAll();
-        $courses = $this->courseModel->getAll();
+        $students = $this->studentRepository->getAll();
+        $courses = $this->courseRepository->getAll();
 
         require_once __DIR__ . '/../views/enrollments/create.php';
     }
@@ -40,7 +40,7 @@ class EnrollmentController
         $course_id = (int) ($_POST['course_id'] ?? 0);
 
         if ($student_id > 0 && $course_id > 0) {
-            $this->enrollmentModel->enroll($student_id, $course_id);
+            $this->enrollmentRepository->enroll($student_id, $course_id);
         }
 
         $this->redirect();
@@ -52,7 +52,7 @@ class EnrollmentController
         $course_id = (int) ($_GET['course_id'] ?? 0);
 
         if ($student_id > 0 && $course_id > 0) {
-            $this->enrollmentModel->drop($student_id, $course_id);
+            $this->enrollmentRepository->drop($student_id, $course_id);
         }
 
         $this->redirect();

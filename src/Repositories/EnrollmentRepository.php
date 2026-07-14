@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Repositories;
 
+use App\Contracts\EnrollmentRepositoryInterface;
 use PDO;
 
-class Enrollment
+class EnrollmentRepository implements EnrollmentRepositoryInterface
 {
     public function __construct(private PDO $connection)
     {

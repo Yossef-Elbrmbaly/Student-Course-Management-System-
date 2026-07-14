@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Repositories;
 
+use App\Contracts\DepartmentRepositoryInterface;
 use PDO;
 
-class Department
+class DepartmentRepository implements DepartmentRepositoryInterface
 {
     public function __construct(private PDO $connection)
     {
