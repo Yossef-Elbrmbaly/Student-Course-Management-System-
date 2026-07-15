@@ -64,7 +64,7 @@ class StudentController
             return;
         }
 
-        $this->studentModel->create($name, $email, $phone, $department_id);
+        $this->studentRepository->create($name, $email, $phone, $department_id);
 
         $this->redirect();
     }
