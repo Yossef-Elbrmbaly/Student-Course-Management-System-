@@ -7,11 +7,20 @@ use PDOException;
 
 class Database
 {
-    private string $host = 'db.fr-pari1.bengt.wasmernet.com';
-    private string $port = '10272';
-    private string $db_name = 'DB_NAME';
-    private string $username = 'user_8dcb59ce';
-    private string $password = 'pw_3kllsUENAPJIOTyYvG1MDoYAnqlESWSI';
+    private string $host;
+    private string $port;
+    private string $db_name;
+    private string $username;
+    private string $password;
+
+    public function __construct()
+    {
+        $this->host = $_ENV['DB_HOST'];
+        $this->port = $_ENV['DB_PORT'];
+        $this->db_name = $_ENV['DB_NAME'];
+        $this->username = $_ENV['DB_USERNAME'];
+        $this->password = $_ENV['DB_PASSWORD'];
+    }
 
     public ?PDO $conn = null;
 
