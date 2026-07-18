@@ -15,11 +15,11 @@ class Database
 
     public function __construct()
     {
-        $this->host = $_ENV['DB_HOST'];
-        $this->port = $_ENV['DB_PORT'];
-        $this->db_name = $_ENV['DB_NAME'];
-        $this->username = $_ENV['DB_USERNAME'];
-        $this->password = $_ENV['DB_PASSWORD'];
+        $this->host = getenv('DB_HOST');
+        $this->port = getenv('DB_PORT');
+        $this->db_name = getenv('DB_NAME');
+        $this->username = getenv('DB_USERNAME');
+        $this->password = getenv('DB_PASSWORD');
     }
 
     public ?PDO $conn = null;
