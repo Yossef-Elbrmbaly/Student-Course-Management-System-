@@ -5,8 +5,11 @@ namespace App\Controllers;
 use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\EnrollmentRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
+use App\Core\BaseController;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 
-class StudentController
+class StudentController extends BaseController
 {
     public function __construct(
         private StudentRepositoryInterface $studentRepository,
@@ -15,42 +18,54 @@ class StudentController
     ) {
     }
 
-    public function index()
+    public function index(): void
     {
         $students = $this->studentRepository->getAll();
 
-        require_once __DIR__ . '/../views/students/index.php';
+        $this->view('students/index', [
+            'students' => $students,
+        ]);
     }
 
-    public function show()
+    public function show(): void
     {
         $id = (int) ($_GET['id'] ?? 0);
+
         $student = $this->studentRepository->getById($id);
 
         if (!$student) {
-            $this->redirect();
+            throw new NotFoundException('Student not found.');
         }
 
         $department = null;
+
         if (!empty($student['department_id'])) {
-            $department = $this->departmentRepository->getById((int) $student['department_id']);
+            $department = $this->departmentRepository->getById(
+                (int) $student['department_id']
+            );
         }
 
         $courses = $this->enrollmentRepository->getStudentCourses($id);
 
-        require_once __DIR__ . '/../views/students/show.php';
+        $this->view('students/show', [
+            'student' => $student,
+            'department' => $department,
+            'courses' => $courses,
+        ]);
     }
 
-    public function create()
+    public function create(): void
     {
         $departments = $this->departmentRepository->getAll();
 
-        require_once __DIR__ . '/../views/students/create.php';
+        $this->view('students/create', [
+            'departments' => $departments,
+        ]);
     }
 
-    public function store()
+    public function store(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
 
@@ -60,32 +75,42 @@ class StudentController
         $department_id = (int) ($_POST['department_id'] ?? 0);
 
         if (empty($name) || empty($email)) {
-            echo 'Name and Email are required fields.';
-            return;
+            throw new ValidationException(
+                'Name and Email are required.'
+            );
         }
 
-        $this->studentRepository->create($name, $email, $phone, $department_id);
+        $this->studentRepository->create(
+            $name,
+            $email,
+            $phone,
+            $department_id
+        );
 
         $this->redirect();
     }
 
-    public function edit()
+    public function edit(): void
     {
         $id = (int) ($_GET['id'] ?? 0);
+
         $student = $this->studentRepository->getById($id);
 
         if (!$student) {
-            $this->redirect();
+            throw new NotFoundException('Student not found.');
         }
 
         $departments = $this->departmentRepository->getAll();
 
-        require_once __DIR__ . '/../views/students/edit.php';
+        $this->view('students/edit', [
+            'student' => $student,
+            'departments' => $departments,
+        ]);
     }
 
-    public function update()
+    public function update(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
 
@@ -96,16 +121,23 @@ class StudentController
         $department_id = (int) ($_POST['department_id'] ?? 0);
 
         if ($id <= 0 || empty($name) || empty($email)) {
-            echo 'Invalid data provided.';
-            return;
+            throw new ValidationException(
+                'Invalid data provided.'
+            );
         }
 
-        $this->studentModel->update($id, $name, $email, $phone, $department_id);
+        $this->studentRepository->update(
+            $id,
+            $name,
+            $email,
+            $phone,
+            $department_id
+        );
 
         $this->redirect();
     }
 
-    public function delete()
+    public function delete(): void
     {
         $id = (int) ($_GET['id'] ?? 0);
 
@@ -114,11 +146,5 @@ class StudentController
         }
 
         $this->redirect();
-    }
-
-    private function redirect()
-    {
-        header('Location: index.php');
-        exit;
     }
 }

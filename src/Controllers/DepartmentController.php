@@ -3,83 +3,99 @@
 namespace App\Controllers;
 
 use App\Contracts\DepartmentRepositoryInterface;
+use App\Core\BaseController;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 
-class DepartmentController
+class DepartmentController extends BaseController
 {
-    public function __construct(private DepartmentRepositoryInterface $departmentRepository)
-    {
+    public function __construct(
+        private DepartmentRepositoryInterface $departmentRepository
+    ) {
     }
 
-    public function index()
+    public function index(): void
     {
         $departments = $this->departmentRepository->getAll();
-        require_once __DIR__ . '/../views/departments/index.php';
+
+        $this->view('departments/index', [
+            'departments' => $departments,
+        ]);
     }
 
-    public function create()
+    public function create(): void
     {
-        require_once __DIR__ . '/../views/departments/create.php';
+        $this->view('departments/create');
     }
 
-    public function store()
+    public function store(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
 
-        $name = $_POST['name'] ?? '';
+        $name = trim($_POST['name'] ?? '');
 
-        if (!empty($name)) {
-            $this->departmentRepository->create($name);
-
-            $this->redirect();
+        if (empty($name)) {
+            throw new ValidationException(
+                'Department name is required.'
+            );
         }
+
+        $this->departmentRepository->create($name);
+
+        $this->redirect();
     }
 
-    public function edit()
+    public function edit(): void
     {
         $id = (int) ($_GET['id'] ?? 0);
 
         $department = $this->departmentRepository->getById($id);
 
-        if ($department) {
-            require_once __DIR__ . '/../views/departments/edit.php';
-            return;
+        if (!$department) {
+            throw new NotFoundException(
+                'Department not found.'
+            );
         }
 
-        $this->redirect();
+        $this->view('departments/edit', [
+            'department' => $department,
+        ]);
     }
 
-    public function update()
+    public function update(): void
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
 
         $id = (int) ($_POST['id'] ?? 0);
-        $name = $_POST['name'] ?? '';
+        $name = trim($_POST['name'] ?? '');
 
-        if ($id > 0 && !empty($name)) {
-            $this->departmentRepository->update($id, $name);
-
-            $this->redirect();
+        if ($id <= 0 || empty($name)) {
+            throw new ValidationException(
+                'Invalid department data.'
+            );
         }
-    }
 
-    public function delete()
-    {
-        $id = (int) ($_GET['id'] ?? 0);
-
-        if ($id > 0) {
-            $this->departmentRepository->delete($id);
-        }
+        $this->departmentRepository->update($id, $name);
 
         $this->redirect();
     }
 
-    private function redirect()
+    public function delete(): void
     {
-        header('Location: index.php?page=departments');
-        exit;
+        $id = (int) ($_GET['id'] ?? 0);
+
+        if ($id <= 0) {
+            throw new ValidationException(
+                'Invalid department id.'
+            );
+        }
+
+        $this->departmentRepository->delete($id);
+
+        $this->redirect();
     }
 }

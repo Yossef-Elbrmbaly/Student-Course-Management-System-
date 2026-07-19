@@ -3,74 +3,101 @@
 namespace App\Controllers;
 
 use App\Contracts\CourseRepositoryInterface;
+use App\Core\BaseController;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 
-class CourseController
+class CourseController extends BaseController
 {
-    public function __construct(private CourseRepositoryInterface $courseRepository)
-    {
+    public function __construct(
+        private CourseRepositoryInterface $courseRepository
+    ) {
     }
 
-    public function index()
+    public function index(): void
     {
         $courses = $this->courseRepository->getAll();
-        require_once __DIR__ . '/../views/courses/index.php';
+
+        $this->view('courses/index', [
+            'courses' => $courses,
+        ]);
     }
 
-    public function create()
+    public function create(): void
     {
-        require_once __DIR__ . '/../views/courses/create.php';
+        $this->view('courses/create');
     }
 
-    public function store()
+    public function store(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
-            $code = $_POST['code'] ?? '';
-
-            if (!empty($name) && !empty($code)) {
-                $this->courseRepository->create($name, $code, $credits);
-                $this->redirect();
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
         }
-    }
 
-    public function edit()
-    {
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        $course = $this->courseRepository->getById($id);
-        if ($course) {
-            require_once __DIR__ . '/../views/courses/edit.php';
-        } else {
-            $this->redirect();
+        $name = trim($_POST['name'] ?? '');
+        $code = trim($_POST['code'] ?? '');
+
+        if (empty($name) || empty($code)) {
+            throw new ValidationException(
+                'Course name and code are required.'
+            );
         }
-    }
 
-    public function update()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-            $name = $_POST['name'] ?? '';
-            $code = $_POST['code'] ?? '';
+        $this->courseRepository->create($name, $code);
 
-            if ($id > 0 && !empty($name) && !empty($code)) {
-                $this->courseRepository->update($id, $name, $code, $credits);
-                $this->redirect();
-            }
-        }
-    }
-
-    public function delete()
-    {
-        $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-        if ($id > 0) {
-            $this->courseRepository->delete($id);
-        }
         $this->redirect();
     }
 
-    private function redirect()
+    public function edit(): void
     {
-        header('Location: index.php?page=courses');
-        exit;
+        $id = (int) ($_GET['id'] ?? 0);
+
+        $course = $this->courseRepository->getById($id);
+
+        if (!$course) {
+            throw new NotFoundException(
+                'Course not found.'
+            );
+        }
+
+        $this->view('courses/edit', [
+            'course' => $course,
+        ]);
+    }
+
+    public function update(): void
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
+        }
+
+        $id = (int) ($_POST['id'] ?? 0);
+        $name = trim($_POST['name'] ?? '');
+        $code = trim($_POST['code'] ?? '');
+
+        if ($id <= 0 || empty($name) || empty($code)) {
+            throw new ValidationException(
+                'Invalid course data.'
+            );
+        }
+
+        $this->courseRepository->update($id, $name, $code);
+
+        $this->redirect();
+    }
+
+    public function delete(): void
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+
+        if ($id <= 0) {
+            throw new ValidationException(
+                'Invalid course id.'
+            );
+        }
+
+        $this->courseRepository->delete($id);
+
+        $this->redirect();
     }
 }
