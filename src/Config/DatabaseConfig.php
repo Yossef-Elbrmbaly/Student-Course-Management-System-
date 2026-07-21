@@ -11,21 +11,21 @@ class DatabaseConfig
 
     public function port(): string
     {
-        return $getenv('DB_PORT');
+        return getenv('DB_PORT');
     }
 
     public function database(): string
     {
-        return $getenv('DB_NAME');
+        return getenv('DB_NAME');
     }
 
     public function username(): string
     {
-        return $getenv('DB_USER');
+        return getenv('DB_USER');
     }
 
     public function password(): string
     {
-        return $getenv('DB_PASS');
+        return getenv('DB_PASS');
     }
 }
