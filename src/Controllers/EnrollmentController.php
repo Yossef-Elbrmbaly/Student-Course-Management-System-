@@ -6,7 +6,8 @@ use App\Contracts\CourseRepositoryInterface;
 use App\Contracts\EnrollmentRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
 use App\Core\BaseController;
-use App\Exceptions\ValidationException;
+use App\Core\Request;
+use App\Exceptions\InvalidMethodException;
 
 class EnrollmentController extends BaseController
 {
@@ -19,67 +20,38 @@ class EnrollmentController extends BaseController
 
     public function index(): void
     {
-        $enrollments = $this->enrollmentRepository->getAll();
-
         $this->view('enrollments/index', [
-            'enrollments' => $enrollments,
+            'enrollments' => $this->enrollmentRepository->getAll(),
         ]);
     }
 
     public function create(): void
     {
-        $students = $this->studentRepository->getAll();
-        $courses = $this->courseRepository->getAll();
-
         $this->view('enrollments/create', [
-            'students' => $students,
-            'courses' => $courses,
+            'students' => $this->studentRepository->getAll(),
+            'courses' => $this->courseRepository->getAll(),
         ]);
     }
 
     public function store(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (Request::method() !== 'POST') {
+            throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $student_id = (int) ($_POST['student_id'] ?? 0);
-        $course_id = (int) ($_POST['course_id'] ?? 0);
-
-        if ($student_id <= 0 || $course_id <= 0) {
-            throw new ValidationException(
-                'Student and Course are required.'
-            );
-        }
-
-        $result = $this->enrollmentRepository->enroll(
-            $student_id,
-            $course_id
+        $this->enrollmentRepository->enroll(
+            Request::inputInt('student_id'),
+            Request::inputInt('course_id')
         );
-
-        if (!$result) {
-            throw new ValidationException(
-                'Student is already enrolled in this course.'
-            );
-        }
 
         $this->redirect();
     }
 
     public function drop(): void
     {
-        $student_id = (int) ($_GET['student_id'] ?? 0);
-        $course_id = (int) ($_GET['course_id'] ?? 0);
-
-        if ($student_id <= 0 || $course_id <= 0) {
-            throw new ValidationException(
-                'Invalid enrollment data.'
-            );
-        }
-
         $this->enrollmentRepository->drop(
-            $student_id,
-            $course_id
+            Request::queryInt('student_id'),
+            Request::queryInt('course_id')
         );
 
         $this->redirect();

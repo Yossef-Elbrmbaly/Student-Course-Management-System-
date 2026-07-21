@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Contracts\CourseRepositoryInterface;
 use App\Core\BaseController;
-use App\Exceptions\NotFoundException;
-use App\Exceptions\ValidationException;
+use App\Core\Request;
+use App\Exceptions\InvalidMethodException;
 
 class CourseController extends BaseController
 {
@@ -16,10 +16,8 @@ class CourseController extends BaseController
 
     public function index(): void
     {
-        $courses = $this->courseRepository->getAll();
-
         $this->view('courses/index', [
-            'courses' => $courses,
+            'courses' => $this->courseRepository->getAll(),
         ]);
     }
 
@@ -30,71 +28,45 @@ class CourseController extends BaseController
 
     public function store(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (Request::method() !== 'POST') {
+            throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $name = trim($_POST['name'] ?? '');
-        $code = trim($_POST['code'] ?? '');
-
-        if (empty($name) || empty($code)) {
-            throw new ValidationException(
-                'Course name and code are required.'
-            );
-        }
-
-        $this->courseRepository->create($name, $code);
+        $this->courseRepository->create(
+            Request::input('name'),
+            Request::input('code')
+        );
 
         $this->redirect();
     }
 
     public function edit(): void
     {
-        $id = (int) ($_GET['id'] ?? 0);
-
-        $course = $this->courseRepository->getById($id);
-
-        if (!$course) {
-            throw new NotFoundException(
-                'Course not found.'
-            );
-        }
+        $id = Request::queryInt('id');
 
         $this->view('courses/edit', [
-            'course' => $course,
+            'course' => $this->courseRepository->getById($id),
         ]);
     }
 
     public function update(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (Request::method() !== 'POST') {
+            throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $id = (int) ($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-        $code = trim($_POST['code'] ?? '');
-
-        if ($id <= 0 || empty($name) || empty($code)) {
-            throw new ValidationException(
-                'Invalid course data.'
-            );
-        }
-
-        $this->courseRepository->update($id, $name, $code);
+        $this->courseRepository->update(
+            Request::inputInt('id'),
+            Request::input('name'),
+            Request::input('code')
+        );
 
         $this->redirect();
     }
 
     public function delete(): void
     {
-        $id = (int) ($_GET['id'] ?? 0);
-
-        if ($id <= 0) {
-            throw new ValidationException(
-                'Invalid course id.'
-            );
-        }
+        $id = Request::queryInt('id');
 
         $this->courseRepository->delete($id);
 

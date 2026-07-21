@@ -3,7 +3,10 @@
 namespace App\Repositories;
 
 use App\Contracts\DepartmentRepositoryInterface;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 use PDO;
+use PDOException;
 
 class DepartmentRepository implements DepartmentRepositoryInterface
 {
@@ -13,32 +16,65 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     public function getAll(): array
     {
-        $query = 'SELECT * FROM departments ORDER BY id ';
+        $query = 'SELECT * FROM departments ORDER BY id';
         $stmt = $this->connection->prepare($query);
         $stmt->execute();
+
         return $stmt->fetchAll();
     }
 
     public function getById(int $id): ?array
     {
+        if ($id <= 0) {
+            throw new ValidationException('Invalid department ID provided.');
+        }
+
         $query = 'SELECT * FROM departments WHERE id = :id';
         $stmt = $this->connection->prepare($query);
         $stmt->execute(['id' => $id]);
+
         $department = $stmt->fetch();
-        return $department ? $department : null;
+
+        if (!$department) {
+            throw new NotFoundException("Department with ID {$id} not found.");
+        }
+
+        return $department;
     }
 
     public function create(string $name): bool
     {
-        $query = 'INSERT INTO departments (name) VALUES (:name)';
-        $stmt = $this->connection->prepare($query);
-        return $stmt->execute(['name' => $name]);
+        if (empty($name)) {
+            throw new ValidationException('Department name is required.');
+        }
+
+        try {
+            $query = 'INSERT INTO departments (name) VALUES (:name)';
+            $stmt = $this->connection->prepare($query);
+
+            return $stmt->execute(['name' => $name]);
+
+        } catch (PDOException $e) {
+            $errorCode = $e->errorInfo[1] ?? null;
+
+            if ($errorCode === 1062) {
+                throw new ValidationException('Department name already exists.');
+            }
+            throw $e;
+        }
     }
 
     public function update(int $id, string $name): bool
     {
+        if ($id <= 0 || empty($name)) {
+            throw new ValidationException('Invalid department data provided.');
+        }
+
+        $this->getById($id);
+
         $query = 'UPDATE departments SET name = :name WHERE id = :id';
         $stmt = $this->connection->prepare($query);
+
         return $stmt->execute([
             'id' => $id,
             'name' => $name,
@@ -47,8 +83,11 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     public function delete(int $id): bool
     {
+        $this->getById($id);
+
         $query = 'DELETE FROM departments WHERE id = :id';
         $stmt = $this->connection->prepare($query);
+
         return $stmt->execute(['id' => $id]);
     }
 }

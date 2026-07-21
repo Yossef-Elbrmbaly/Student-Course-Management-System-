@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Contracts\DepartmentRepositoryInterface;
 use App\Core\BaseController;
-use App\Exceptions\NotFoundException;
-use App\Exceptions\ValidationException;
+use App\Core\Request;
+use App\Exceptions\InvalidMethodException;
 
 class DepartmentController extends BaseController
 {
@@ -16,10 +16,8 @@ class DepartmentController extends BaseController
 
     public function index(): void
     {
-        $departments = $this->departmentRepository->getAll();
-
         $this->view('departments/index', [
-            'departments' => $departments,
+            'departments' => $this->departmentRepository->getAll(),
         ]);
     }
 
@@ -30,69 +28,43 @@ class DepartmentController extends BaseController
 
     public function store(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (Request::method() !== 'POST') {
+            throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $name = trim($_POST['name'] ?? '');
-
-        if (empty($name)) {
-            throw new ValidationException(
-                'Department name is required.'
-            );
-        }
-
-        $this->departmentRepository->create($name);
+        $this->departmentRepository->create(
+            Request::input('name')
+        );
 
         $this->redirect();
     }
 
     public function edit(): void
     {
-        $id = (int) ($_GET['id'] ?? 0);
-
-        $department = $this->departmentRepository->getById($id);
-
-        if (!$department) {
-            throw new NotFoundException(
-                'Department not found.'
-            );
-        }
+        $id = Request::queryInt('id');
 
         $this->view('departments/edit', [
-            'department' => $department,
+            'department' => $this->departmentRepository->getById($id),
         ]);
     }
 
     public function update(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return;
+        if (Request::method() !== 'POST') {
+            throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $id = (int) ($_POST['id'] ?? 0);
-        $name = trim($_POST['name'] ?? '');
-
-        if ($id <= 0 || empty($name)) {
-            throw new ValidationException(
-                'Invalid department data.'
-            );
-        }
-
-        $this->departmentRepository->update($id, $name);
+        $this->departmentRepository->update(
+            Request::inputInt('id'),
+            Request::input('name')
+        );
 
         $this->redirect();
     }
 
     public function delete(): void
     {
-        $id = (int) ($_GET['id'] ?? 0);
-
-        if ($id <= 0) {
-            throw new ValidationException(
-                'Invalid department id.'
-            );
-        }
+        $id = Request::queryInt('id');
 
         $this->departmentRepository->delete($id);
 

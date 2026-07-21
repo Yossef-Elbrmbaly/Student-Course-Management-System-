@@ -6,20 +6,15 @@ $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
 
 use App\Config\Database;
-use App\Controllers\CourseController;
-use App\Controllers\DepartmentController;
-use App\Controllers\EnrollmentController;
-use App\Controllers\StudentController;
+use App\Config\DatabaseConfig;
+use App\Core\AppFactory;
 use App\Core\ExceptionHandler;
-use App\Repositories\CourseRepository;
-use App\Repositories\DepartmentRepository;
-use App\Repositories\EnrollmentRepository;
-use App\Repositories\StudentRepository;
 
 set_exception_handler([ExceptionHandler::class, 'handle']);
 
+$config = new DatabaseConfig();
 
-$database = new Database();
+$database = new Database($config);
 
 $connection = $database->connect();
 
@@ -28,8 +23,7 @@ $action = $_GET['action'] ?? 'index';
 
 if ($page === 'departments') {
 
-    $departmentRepository = new DepartmentRepository($connection);
-    $departmentController = new DepartmentController($departmentRepository);
+    $departmentController = AppFactory::departmentController($connection);
 
     if ($action === 'create') {
         $departmentController->create();
@@ -46,8 +40,7 @@ if ($page === 'departments') {
     }
 } elseif ($page === 'courses') {
 
-    $courseRepository = new CourseRepository($connection);
-    $courseController = new CourseController($courseRepository);
+    $courseController = AppFactory::courseController($connection);
 
     if ($action === 'create') {
         $courseController->create();
@@ -64,15 +57,7 @@ if ($page === 'departments') {
     }
 } elseif ($page === 'enrollments') {
 
-    $enrollmentRepository = new EnrollmentRepository($connection);
-    $studentRepository = new StudentRepository($connection);
-    $courseRepository = new CourseRepository($connection);
-
-    $enrollmentController = new EnrollmentController(
-        $enrollmentRepository,
-        $studentRepository,
-        $courseRepository
-    );
+    $enrollmentController = AppFactory::enrollmentController($connection);
 
     if ($action === 'create') {
         $enrollmentController->create();
@@ -85,16 +70,8 @@ if ($page === 'departments') {
     }
 
 } else {
-    $studentRepository = new StudentRepository($connection);
-    $departmentRepository = new DepartmentRepository($connection);
-    $enrollmentRepository = new EnrollmentRepository($connection);
 
-
-    $studentController = new StudentController(
-        $studentRepository,
-        $departmentRepository,
-        $enrollmentRepository
-    );
+    $studentController = AppFactory::studentController($connection);
 
     if ($action === 'create') {
         $studentController->create();

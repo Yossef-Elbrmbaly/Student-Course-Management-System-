@@ -7,58 +7,42 @@ use PDOException;
 
 class Database
 {
-    private string $host;
-    private string $port;
-    private string $db_name;
-    private string $username;
-    private string $password;
+    private ?PDO $connection = null;
 
-    public function __construct()
+    public function __construct(private DatabaseConfig $config)
     {
-        $this->host = getenv('DB_HOST');
-        $this->port = getenv('DB_PORT');
-        $this->db_name = getenv('DB_NAME');
-        $this->username = getenv('DB_USERNAME');
-        $this->password = getenv('DB_PASSWORD');
     }
 
-    public ?PDO $conn = null;
-
-    public function connect(): ?PDO
+    public function connect(): PDO
     {
-        if ($this->conn === null) {
+        if ($this->connection === null) {
             try {
-                $this->conn = new PDO(
-                    "mysql:host={$this->host};port={$this->port};dbname={$this->db_name};charset=utf8mb4",
-                    $this->username,
-                    $this->password
+                $this->connection = new PDO(
+                    sprintf(
+                        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+                        $this->config->host(),
+                        $this->config->port(),
+                        $this->config->database()
+                    ),
+                    $this->config->username(),
+                    $this->config->password()
                 );
 
-                $this->conn->setAttribute(
+                $this->connection->setAttribute(
                     PDO::ATTR_ERRMODE,
                     PDO::ERRMODE_EXCEPTION
                 );
 
-                $this->conn->setAttribute(
+                $this->connection->setAttribute(
                     PDO::ATTR_DEFAULT_FETCH_MODE,
                     PDO::FETCH_ASSOC
                 );
 
             } catch (PDOException $e) {
-                die('Database connection problem: ' . $e->getMessage());
+                throw $e;
             }
         }
 
-        return $this->conn;
-    }
-
-    public function checkConnection(): bool
-    {
-        try {
-            $this->connect();
-            return true;
-        } catch (PDOException $e) {
-            return false;
-        }
+        return $this->connection ;
     }
 }

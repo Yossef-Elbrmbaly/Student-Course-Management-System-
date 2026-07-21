@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Exceptions\NotFoundException;
+use App\Exceptions\ValidationException;
 use Throwable;
 
 class ExceptionHandler
@@ -10,21 +12,20 @@ class ExceptionHandler
     {
         $debug = filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
-        if ($exception instanceof ValidationException) {
-            http_response_code(400);
-            echo '<h2>Validation Error</h2>';
-        } elseif ($exception instanceof NotFoundException) {
-            http_response_code(404);
-            echo '<h2>Not Found</h2>';
-        } else {
-            http_response_code(500);
-            echo '<h2>Internal Server Error</h2>';
-        }
+        [$statusCode, $title] = match (true) {
+            $exception instanceof ValidationException => [400, 'Validation Error'],
+            $exception instanceof NotFoundException => [404, 'Not Found'],
+            $exception instanceof InvalidMethodException => [405, 'Method Not Allowed'],
+            default => [500, 'Internal Server Error'],
+        };
 
+        http_response_code($statusCode);
+        echo "<h2>{$title}</h2>";
 
         if ($debug) {
             echo '<pre>';
             echo $exception->getMessage();
+            echo $exception->getTraceAsString();
             echo '</pre>';
         }
 
