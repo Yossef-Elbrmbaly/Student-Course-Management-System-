@@ -6,26 +6,26 @@ class DatabaseConfig
 {
     public function host(): string
     {
-        return $_ENV['DB_HOST'];
+        return $getenv['DB_HOST'];
     }
 
     public function port(): string
     {
-        return $_ENV['DB_PORT'];
+        return $getenv['DB_PORT'];
     }
 
     public function database(): string
     {
-        return $_ENV['DB_NAME'];
+        return $getenv['DB_NAME'];
     }
 
     public function username(): string
     {
-        return $_ENV['DB_USER'];
+        return $getenv['DB_USER'];
     }
 
     public function password(): string
     {
-        return $_ENV['DB_PASS'];
+        return $getenv['DB_PASS'];
     }
 }
