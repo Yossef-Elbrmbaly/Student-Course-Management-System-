@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Exceptions\NotFoundException;
 use App\Exceptions\ValidationException;
+use App\Exceptions\InvalidMethodException;
 use Throwable;
 
 class ExceptionHandler
