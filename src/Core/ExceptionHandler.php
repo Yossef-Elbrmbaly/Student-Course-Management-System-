@@ -11,7 +11,7 @@ class ExceptionHandler
 {
     public static function handle(Throwable $exception): void
     {
-        $debug = filter_var($_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $debug = filter_var(getenv('APP_DEBUG') ?? false, FILTER_VALIDATE_BOOLEAN);
 
         [$statusCode, $title] = match (true) {
             $exception instanceof ValidationException => [400, 'Validation Error'],
