@@ -97,20 +97,20 @@
 
                                 <tr>
 
-                                    <td><?= $department['id'] ?></td>
+                                    <td><?= (int) $department['id'] ?></td>
 
                                     <td>
-                                        <?= htmlspecialchars($department['name']) ?>
+                                        <?= htmlspecialchars($department['name'], ENT_QUOTES, 'UTF-8') ?>
                                     </td>
 
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
-                                            <a href="index.php?page=departments&action=edit&id=<?= $department['id'] ?>"
+                                            <a href="index.php?page=departments&action=edit&id=<?= (int) $department['id'] ?>"
                                                 class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil-square"></i> Edit
                                             </a>
 
-                                            <a href="index.php?page=departments&action=delete&id=<?= $department['id'] ?>"
+                                            <a href="index.php?page=departments&action=delete&id=<?= (int) $department['id'] ?>"
                                                 class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to delete this department?')">
                                                 <i class="bi bi-trash3"></i> Delete

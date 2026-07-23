@@ -9,7 +9,6 @@
 </head>
 <body class="bg-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="index.php">
@@ -28,12 +27,11 @@
                     </div>
                     <div class="card-body p-4">
                         <form action="index.php?page=departments&action=update" method="POST">
-                            <!-- حقل مخفي لتمرير الـ ID للكونترولر -->
-                            <input type="hidden" name="id" value="<?= $department['id'] ?>">
+                            <input type="hidden" name="id" value="<?= (int) $department['id'] ?>">
                             
                             <div class="mb-4">
                                 <label for="name" class="form-label">Department Name</label>
-                                <input type="text" name="name" id="name" class="form-control" value="<?= htmlspecialchars($department['name']) ?>" required>
+                                <input type="text" name="name" id="name" class="form-control" value="<?= htmlspecialchars($department['name'], ENT_QUOTES, 'UTF-8') ?>" required>
                             </div>
 
                             <div class="d-flex flex-column-reverse flex-sm-row justify-content-between gap-2">

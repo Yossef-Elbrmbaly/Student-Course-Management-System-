@@ -48,8 +48,8 @@
                                 <select name="department_id" id="department_id" class="form-select">
                                     <option value="">Select Department</option>
                                     <?php foreach ($departments as $department): ?>
-                                        <option value="<?= $department['id'] ?>">
-                                            <?= ($department['name']) ?>
+                                        <option value="<?= (int) $department['id'] ?>">
+                                            <?= htmlspecialchars($department['name'], ENT_QUOTES, 'UTF-8') ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>

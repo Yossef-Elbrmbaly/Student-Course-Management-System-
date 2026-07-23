@@ -82,7 +82,7 @@
 
             <div class="card-body">
 
-                <table id="studentsTable" class="table table-striped table-hover align-middle">
+                <table id="coursesTablecoursesTable" class="table table-striped table-hover align-middle">
 
                     <thead class="table-dark">
                         <tr>
@@ -101,23 +101,23 @@
 
                                 <tr>
 
-                                    <td><?= $course['id'] ?></td>
+                                    <td><?= (int) $course['id'] ?></td>
 
-                                    <td><?= htmlspecialchars($course['name']) ?></td>
+                                    <td><?= htmlspecialchars($course['name'], ENT_QUOTES, 'UTF-8') ?></td>
 
                                     <td>
                                         <span class="badge bg-secondary">
-                                            <?= htmlspecialchars($course['code']) ?>
+                                            <?= htmlspecialchars($course['code'], ENT_QUOTES, 'UTF-8') ?>
                                         </span>
                                     </td>
 
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
-                                            <a href="index.php?page=courses&action=edit&id=<?= $course['id'] ?>" class="btn btn-sm btn-warning">
+                                            <a href="index.php?page=courses&action=edit&id=<?= (int) $course['id'] ?>" class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil-square"></i> Edit
                                             </a>
 
-                                            <a href="index.php?page=courses&action=delete&id=<?= $course['id'] ?>"
+                                            <a href="index.php?page=courses&action=delete&id=<?= (int) $course['id'] ?>"
                                                 class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to delete this course?')">
                                                 <i class="bi bi-trash3"></i> Delete
@@ -159,7 +159,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#studentsTable').DataTable({
+            $('#coursesTable').DataTable({
                 "paging": true,
                 "searching": true,
                 "ordering": false,

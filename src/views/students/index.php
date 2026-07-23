@@ -76,33 +76,39 @@
                         <?php if (!empty($students)): ?>
                             <?php foreach ($students as $student): ?>
                                 <tr>
-                                    <td><?= $student['id'] ?></td>
+                                    <td><?= (int) $student['id'] ?></td>
+
                                     <td>
-                                        <?= ($student['name']) ?>
+                                        <?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?>
                                         <div class="small text-muted d-md-none">
-                                            <?= ($student['department_name'] ?? 'Not Assigned') ?>
+                                            <?= htmlspecialchars($student['department_name'] ?? 'Not Assigned', ENT_QUOTES, 'UTF-8') ?>
                                         </div>
                                     </td>
-                                    <td><?= ($student['email']) ?></td>
-                                    <td class="d-none d-md-table-cell"><?= ($student['phone']) ?></td>
+
+                                    <td><?= htmlspecialchars($student['email'], ENT_QUOTES, 'UTF-8') ?></td>
+
+                                    <td class="d-none d-md-table-cell"><?= htmlspecialchars($student['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?></td>
+
                                     <td class="d-none d-md-table-cell">
                                         <span class="badge bg-info text-dark">
-                                            <?= ($student['department_name'] ?? 'Not Assigned') ?>
+                                            <?= htmlspecialchars($student['department_name'] ?? 'Not Assigned', ENT_QUOTES, 'UTF-8') ?>
                                         </span>
                                     </td>
+
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
-                                            <a href="index.php?page=students&action=show&id=<?= $student['id'] ?>" class="btn btn-sm btn-outline-primary">
+                                            <a href="index.php?page=students&action=show&id=<?= (int) $student['id'] ?>" class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-eye"></i><span class="d-none d-lg-inline"> View</span>
                                             </a>
-                                            <a href="index.php?page=students&action=edit&id=<?= $student['id'] ?>" class="btn btn-sm btn-warning">
+                                            <a href="index.php?page=students&action=edit&id=<?= (int) $student['id'] ?>" class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline"> Edit</span>
                                             </a>
-                                            <a href="index.php?page=students&action=delete&id=<?= $student['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this student?')">
+                                            <a href="index.php?page=students&action=delete&id=<?= (int) $student['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this student?')">
                                                 <i class="bi bi-trash3"></i><span class="d-none d-lg-inline"> Delete</span>
                                             </a>
                                         </div>
                                     </td>
+                                    
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>

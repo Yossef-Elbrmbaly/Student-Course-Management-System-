@@ -39,7 +39,7 @@
                             <input
                                 type="hidden"
                                 name="id"
-                                value="<?= $course['id'] ?>"
+                                value="<?= (int) $course['id'] ?>"
                             >
 
                             <div class="mb-3">
@@ -50,7 +50,7 @@
                                     id="name"
                                     name="name"
                                     class="form-control"
-                                    value="<?= htmlspecialchars($course['name']) ?>"
+                                    value="<?= htmlspecialchars($course['name'], ENT_QUOTES, 'UTF-8') ?>"
                                     required
                                 >
                             </div>
@@ -63,7 +63,7 @@
                                     id="code"
                                     name="code"
                                     class="form-control"
-                                    value="<?= htmlspecialchars($course['code']) ?>"
+                                    value="<?= htmlspecialchars($course['code'], ENT_QUOTES, 'UTF-8') ?>"
                                     required
                                 >
                             </div>

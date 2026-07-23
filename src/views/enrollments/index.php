@@ -85,15 +85,15 @@
                 <?php else: ?>
                     <?php foreach ($enrollments as $enrollment): ?>
                         <tr>
-                            <td><?= ($enrollment['student_name']) ?></td>
-                            <td><?= ($enrollment['course_name']) ?></td>
+                            <td><?= htmlspecialchars($enrollment['student_name'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td><?= htmlspecialchars($enrollment['course_name'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td>
                                 <span class="badge bg-secondary">
-                                    <?= ($enrollment['code']) ?>
+                                    <?= htmlspecialchars($enrollment['code'], ENT_QUOTES, 'UTF-8') ?>
                                 </span>
                             </td>
                             <td>
-                                <a href="index.php?page=enrollments&action=drop&student_id=<?= $enrollment['student_id'] ?>&course_id=<?= $enrollment['course_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to drop this course?')">
+                                <a href="index.php?page=enrollments&action=drop&student_id=<?= (int) $enrollment['student_id'] ?>&course_id=<?= (int) $enrollment['course_id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to drop this course?')">
                                     <i class="bi bi-x-circle"></i> Drop
                                 </a>
                             </td>

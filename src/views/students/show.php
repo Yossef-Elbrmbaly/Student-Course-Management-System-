@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Profile - <?= htmlspecialchars($student['name']) ?></title>
+    <title>Student Profile - <?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
@@ -54,7 +54,7 @@
                 </a>
                 <h2 class="mb-0">Student Profile</h2>
             </div>
-            <a href="index.php?page=students&action=edit&id=<?= $student['id'] ?>" class="btn btn-warning shadow-sm">
+            <a href="index.php?page=students&action=edit&id=<?= (int) $student['id'] ?>" class="btn btn-warning shadow-sm">
                 <i class="bi bi-pencil-square me-1"></i>Edit Student
             </a>
         </div>
@@ -69,23 +69,23 @@
                             style="width:88px;height:88px;font-size:2rem;">
                             <i class="bi bi-person-fill"></i>
                         </div>
-                        <h4 class="mb-1"><?= htmlspecialchars($student['name']) ?></h4>
-                        <p class="text-muted small mb-3">Student #<?= $student['id'] ?></p>
+                        <h4 class="mb-1"><?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?></h4>
+                        <p class="text-muted small mb-3">Student #<?= (int) $student['id'] ?></p>
 
                         <ul class="list-group list-group-flush text-start">
                             <li class="list-group-item d-flex align-items-center gap-2 px-0">
                                 <i class="bi bi-envelope text-muted"></i>
-                                <span><?= htmlspecialchars($student['email']) ?></span>
+                                <span><?= htmlspecialchars($student['email'], ENT_QUOTES, 'UTF-8') ?></span>
                             </li>
                             <li class="list-group-item d-flex align-items-center gap-2 px-0">
                                 <i class="bi bi-telephone text-muted"></i>
-                                <span><?= !empty($student['phone']) ? htmlspecialchars($student['phone']) : 'Not provided' ?></span>
+                                <span><?= !empty($student['phone']) ? htmlspecialchars($student['phone'], ENT_QUOTES, 'UTF-8') : 'Not provided' ?></span>
                             </li>
                             <li class="list-group-item d-flex align-items-center gap-2 px-0">
                                 <i class="bi bi-building text-muted"></i>
                                 <span>
                                     <?php if ($department): ?>
-                                        <?= htmlspecialchars($department['name']) ?>
+                                        <?= htmlspecialchars($department['name'], ENT_QUOTES, 'UTF-8') ?>
                                     <?php else: ?>
                                         <span class="text-muted">Not Assigned</span>
                                     <?php endif; ?>
@@ -117,12 +117,12 @@
                                     <tbody>
                                         <?php foreach ($courses as $course): ?>
                                             <tr>
-                                                <td><?= htmlspecialchars($course['name']) ?></td>
+                                                <td><?= htmlspecialchars($course['name'], ENT_QUOTES, 'UTF-8') ?></td>
                                                 <td>
-                                                    <span class="badge bg-secondary"><?= htmlspecialchars($course['code']) ?></span>
+                                                    <span class="badge bg-secondary"><?= htmlspecialchars($course['code'], ENT_QUOTES, 'UTF-8') ?></span>
                                                 </td>
                                                 <td class="text-end">
-                                                    <a href="index.php?page=enrollments&action=drop&student_id=<?= $student['id'] ?>&course_id=<?= $course['id'] ?>"
+                                                    <a href="index.php?page=enrollments&action=drop&student_id=<?= (int) $student['id'] ?>&course_id=<?= (int) $course['id'] ?>"
                                                     class="btn btn-sm btn-outline-danger"
                                                     onclick="return confirm('Are you sure you want to drop this course?')">
                                                         <i class="bi bi-x-circle"></i> Drop

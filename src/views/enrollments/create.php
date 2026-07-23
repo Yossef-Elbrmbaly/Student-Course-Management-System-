@@ -39,8 +39,8 @@
                                 required>
                                 <option value="">Select Student</option>
                                 <?php foreach ($students as $student): ?>
-                                    <option value="<?= $student['id'] ?>">
-                                        <?= ($student['name']) ?>
+                                    <option value="<?= (int) $student['id'] ?>">
+                                        <?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -56,9 +56,9 @@
                                 required>
                                 <option value="">Select Course</option>
                                 <?php foreach ($courses as $course): ?>
-                                    <option value="<?= $course['id'] ?>">
-                                        <?= ($course['name']) ?>
-                                        (<?= ($course['code']) ?>)
+                                    <option value="<?= (int) $course['id'] ?>">
+                                        <?= htmlspecialchars($course['name'], ENT_QUOTES, 'UTF-8') ?>
+                                        (<?= htmlspecialchars($course['code'], ENT_QUOTES, 'UTF-8') ?>)
                                     </option>
                                 <?php endforeach; ?>
                             </select>

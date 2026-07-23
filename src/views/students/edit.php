@@ -27,21 +27,21 @@
                     </div>
                     <div class="card-body p-4">
                         <form action="index.php?page=students&action=update" method="POST">
-                            <input type="hidden" name="id" value="<?= $student['id'] ?>">
+                            <input type="hidden" name="id" value="<?= (int) $student['id'] ?>">
                             
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name</label>
-                                <input type="text" name="name" id="name" class="form-control" value="<?= ($student['name']) ?>" required>
+                                <input type="text" name="name" id="name" class="form-control" value="<?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?>" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" name="email" id="email" class="form-control" value="<?= ($student['email']) ?>" required>
+                                <input type="email" name="email" id="email" class="form-control" value="<?= htmlspecialchars($student['email'], ENT_QUOTES, 'UTF-8') ?>" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="phone" class="form-label">Phone Number (Optional)</label>
-                                <input type="text" name="phone" id="phone" class="form-control" value="<?= ($student['phone'] ?? '') ?>">
+                                <input type="text" name="phone" id="phone" class="form-control" value="<?= htmlspecialchars($student['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                             </div>
 
                             <div class="mb-4">
@@ -49,8 +49,8 @@
                                 <select name="department_id" id="department_id" class="form-select">
                                     <option value="">Select Department</option>
                                     <?php foreach ($departments as $dept): ?>
-                                        <option value="<?= $dept['id'] ?>" <?= ($dept['id'] == $student['department_id']) ? 'selected' : '' ?>>
-                                            <?= ($dept['name']) ?>
+                                        <option value="<?=(int) $dept['id'] ?>" <?= ($dept['id'] === $student['department_id']) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($dept['name'], ENT_QUOTES, 'UTF-8') ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
