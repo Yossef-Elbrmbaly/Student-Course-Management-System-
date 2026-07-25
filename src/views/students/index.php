@@ -16,9 +16,18 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
-            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
-                Logout
-            </a>
+            <form method="POST" action="index.php?page=auth&action=logout" class="m-0">
+
+                <input
+                    type="hidden"
+                    name="_token"
+                    value="<?= \App\Core\Csrf::generate() ?>"
+                >
+
+                <button type="submit" class="btn btn-outline-danger">
+                    Logout
+                </button>
+            </form>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -106,9 +115,31 @@
                                             <a href="index.php?page=students&action=edit&id=<?= (int) $student['id'] ?>" class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil-square"></i><span class="d-none d-lg-inline"> Edit</span>
                                             </a>
-                                            <a href="index.php?page=students&action=delete&id=<?= (int) $student['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this student?')">
-                                                <i class="bi bi-trash3"></i><span class="d-none d-lg-inline"> Delete</span>
-                                            </a>
+                                            <form
+                                                action="index.php?page=students&action=delete"
+                                                method="POST"
+                                                class="d-inline"
+                                                onsubmit="return confirm('Are you sure you want to delete this student?')"
+                                            >
+
+                                                <input
+                                                    type="hidden"
+                                                    name="_token"
+                                                    value="<?= \App\Core\Csrf::generate() ?>"
+                                                >
+
+                                                <input
+                                                    type="hidden"
+                                                    name="id"
+                                                    value="<?= (int) $student['id'] ?>"
+                                                >
+
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="bi bi-trash3"></i>
+                                                    <span class="d-none d-lg-inline"> Delete</span>
+                                                </button>
+
+                                            </form>
                                         </div>
                                     </td>
                                     

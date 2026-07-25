@@ -15,9 +15,19 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
-            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
-                Logout
-            </a>            
+            <form method="POST" action="index.php?page=auth&action=logout" class="m-0">
+
+                <input
+                    type="hidden"
+                    name="_token"
+                    value="<?= \App\Core\Csrf::generate() ?>"
+                >
+
+                <button type="submit" class="btn btn-outline-danger">
+                    Logout
+                </button>
+
+            </form>            
         </div>
     </nav>
 
@@ -31,6 +41,12 @@
                     <div class="card-body p-4">
                         <form action="index.php?page=departments&action=update" method="POST">
                             <input type="hidden" name="id" value="<?= (int) $department['id'] ?>">
+                            
+                            <input
+                                type="hidden"
+                                name="_token"
+                                value="<?= \App\Core\Csrf::generate() ?>"
+                            >
                             
                             <div class="mb-4">
                                 <label for="name" class="form-label">Department Name</label>

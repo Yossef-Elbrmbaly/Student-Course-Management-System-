@@ -18,9 +18,19 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
-            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
-                Logout
-            </a>
+            <form method="POST" action="index.php?page=auth&action=logout" class="m-0">
+
+                <input
+                    type="hidden"
+                    name="_token"
+                    value="<?= \App\Core\Csrf::generate() ?>"
+                >
+
+                <button type="submit" class="btn btn-outline-danger">
+                    Logout
+                </button>
+
+            </form>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -151,11 +161,36 @@
                                                 <?php
                                     if (Auth::isAdmin()): ?>
                                                     <td class="text-end">
-                                                        <a href="index.php?page=enrollments&action=drop&student_id=<?= (int) $student['id'] ?>&course_id=<?= (int) $course['id'] ?>"
-                                                        class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Are you sure you want to drop this course?')">
-                                                            <i class="bi bi-x-circle"></i> Drop
-                                                        </a>
+                                                        <form
+                                                            action="index.php?page=enrollments&action=drop"
+                                                            method="POST"
+                                                            class="d-inline"
+                                                            onsubmit="return confirm('Are you sure you want to drop this course?')"
+                                                        >
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="_token"
+                                                                value="<?= \App\Core\Csrf::generate() ?>"
+                                                            >
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="student_id"
+                                                                value="<?= (int) $student['id'] ?>"
+                                                            >
+
+                                                            <input
+                                                                type="hidden"
+                                                                name="course_id"
+                                                                value="<?= (int) $course['id'] ?>"
+                                                            >
+
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                <i class="bi bi-x-circle"></i> Drop
+                                                            </button>
+
+                                                        </form>
                                                     </td>
                                                 <?php endif; ?>    
                                             </tr>

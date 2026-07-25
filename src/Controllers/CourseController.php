@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Contracts\CourseRepositoryInterface;
 use App\Core\BaseController;
 use App\Core\Request;
-use App\Exceptions\InvalidMethodException;
+use App\Middleware\CsrfMiddleware;
 
 class CourseController extends BaseController
 {
@@ -28,9 +28,7 @@ class CourseController extends BaseController
 
     public function store(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->courseRepository->create(
             Request::input('name'),
@@ -51,9 +49,7 @@ class CourseController extends BaseController
 
     public function update(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->courseRepository->update(
             Request::inputInt('id'),
@@ -66,7 +62,9 @@ class CourseController extends BaseController
 
     public function delete(): void
     {
-        $id = Request::queryInt('id');
+        CsrfMiddleware::handle();
+
+        $id = Request::inputInt('id');
 
         $this->courseRepository->delete($id);
 

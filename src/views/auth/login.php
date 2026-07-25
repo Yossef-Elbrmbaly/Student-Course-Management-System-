@@ -24,7 +24,11 @@
                 <div class="card-body">
 
                     <form method="POST" action="index.php?page=auth&action=authenticate">
-
+                        <input
+                            type="hidden"
+                            name="_token"
+                            value="<?= \App\Core\Csrf::generate() ?>"
+                        >
                         <div class="mb-3">
                             <label>Email</label>
                             <input
@@ -32,6 +36,7 @@
                                 name="email"
                                 class="form-control"
                                 required
+                                placeholder="example@gmail.com"
                             >
                         </div>
 
@@ -42,6 +47,7 @@
                                 name="password"
                                 class="form-control"
                                 required
+                                placeholder="******"
                             >
                         </div>
 

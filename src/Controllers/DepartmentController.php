@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Contracts\DepartmentRepositoryInterface;
 use App\Core\BaseController;
 use App\Core\Request;
-use App\Exceptions\InvalidMethodException;
+use App\Middleware\CsrfMiddleware;
 
 class DepartmentController extends BaseController
 {
@@ -28,9 +28,7 @@ class DepartmentController extends BaseController
 
     public function store(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->departmentRepository->create(
             Request::input('name')
@@ -50,9 +48,7 @@ class DepartmentController extends BaseController
 
     public function update(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->departmentRepository->update(
             Request::inputInt('id'),
@@ -64,7 +60,9 @@ class DepartmentController extends BaseController
 
     public function delete(): void
     {
-        $id = Request::queryInt('id');
+        CsrfMiddleware::handle();
+
+        $id = Request::inputInt('id');
 
         $this->departmentRepository->delete($id);
 

@@ -6,8 +6,8 @@ use App\Contracts\UserRepositoryInterface;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Request;
-use App\Exceptions\InvalidMethodException;
 use App\Exceptions\ValidationException;
+use App\Middleware\CsrfMiddleware;
 
 class AuthController extends BaseController
 {
@@ -34,9 +34,7 @@ class AuthController extends BaseController
 
     public function authenticate(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $user = $this->userRepository->getByEmail(Request::input('email'));
 
@@ -58,7 +56,6 @@ class AuthController extends BaseController
     {
         Auth::logout();
 
-        $this
-->redirect('index.php?page=auth&action=login');
+        $this->redirect('index.php?page=auth&action=login');
     }
 }

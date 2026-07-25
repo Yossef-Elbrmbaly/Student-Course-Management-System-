@@ -7,7 +7,7 @@ use App\Contracts\EnrollmentRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
 use App\Core\BaseController;
 use App\Core\Request;
-use App\Exceptions\InvalidMethodException;
+use App\Middleware\CsrfMiddleware;
 
 class EnrollmentController extends BaseController
 {
@@ -35,9 +35,7 @@ class EnrollmentController extends BaseController
 
     public function store(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->enrollmentRepository->enroll(
             Request::inputInt('student_id'),
@@ -49,9 +47,11 @@ class EnrollmentController extends BaseController
 
     public function drop(): void
     {
+        CsrfMiddleware::handle();
+
         $this->enrollmentRepository->drop(
-            Request::queryInt('student_id'),
-            Request::queryInt('course_id')
+            Request::inputInt('student_id'),
+            Request::inputInt('course_id')
         );
 
         $this->redirect();

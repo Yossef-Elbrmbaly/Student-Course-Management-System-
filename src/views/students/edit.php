@@ -32,6 +32,12 @@
                         <form action="index.php?page=students&action=update" method="POST">
                             <input type="hidden" name="id" value="<?= (int) $student['id'] ?>">
                             
+                            <input
+                                type="hidden"
+                                name="_token"
+                                value="<?= \App\Core\Csrf::generate() ?>"
+                            >
+                            
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name</label>
                                 <input type="text" name="name" id="name" class="form-control" value="<?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?>" required>

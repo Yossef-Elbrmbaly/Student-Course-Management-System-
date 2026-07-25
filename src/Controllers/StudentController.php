@@ -9,8 +9,9 @@ use App\Contracts\UserRepositoryInterface;
 use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Request;
-use App\Exceptions\InvalidMethodException;
 use App\Exceptions\UnauthorizedException;
+use App\Middleware\CsrfMiddleware;
+
 
 class StudentController extends BaseController
 {
@@ -59,9 +60,7 @@ class StudentController extends BaseController
 
     public function store(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $studentId = $this->studentRepository->create(
             Request::input('name'),
@@ -92,9 +91,7 @@ class StudentController extends BaseController
 
     public function update(): void
     {
-        if (Request::method() !== 'POST') {
-            throw new InvalidMethodException('Only POST requests are allowed.');
-        }
+        CsrfMiddleware::handle();
 
         $this->studentRepository->update(
             Request::inputInt('id'),
@@ -109,7 +106,9 @@ class StudentController extends BaseController
 
     public function delete(): void
     {
-        $id = Request::queryInt('id');
+        CsrfMiddleware::handle();
+        
+        $id = Request::inputInt('id');
 
         $this->studentRepository->delete($id);
 
