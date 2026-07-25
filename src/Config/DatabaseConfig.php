@@ -6,7 +6,7 @@ class DatabaseConfig
 {
     public function host(): string
     {
-                return getenv('DB_HOST');
+        return getenv('DB_HOST');
     }
 
     public function port(): string
@@ -27,3 +27,5 @@ class DatabaseConfig
     public function password(): string
     {
         return getenv('DB_PASS');
+    }
+}
