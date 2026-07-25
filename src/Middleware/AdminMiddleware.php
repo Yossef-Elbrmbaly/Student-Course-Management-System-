@@ -3,6 +3,7 @@
 namespace App\Middleware;
 
 use App\Core\Auth;
+use App\Exceptions\UnauthorizedException;
 
 class AdminMiddleware
 {
