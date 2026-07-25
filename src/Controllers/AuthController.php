@@ -45,10 +45,9 @@ class AuthController extends BaseController
         }
 
         Auth::login($user);
-        if (Auth::isAdmin()){
+        if (Auth::isAdmin()) {
             $this->redirect();
-        }
-        elseif (Auth::isUser()){
+        } elseif (Auth::isUser()) {
             $this->redirect(
                 'index.php?page=students&action=show&id=' . Auth::studentId()
             );

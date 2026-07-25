@@ -31,7 +31,7 @@
 
                 use App\Core\Auth;
 
-                if (Auth::isAdmin()): ?>                
+    if (Auth::isAdmin()): ?>                
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link active" href="index.php?page=students">
@@ -68,7 +68,7 @@
             <div>
 
                 <?php
-                    if (Auth::isAdmin()): ?>
+        if (Auth::isAdmin()): ?>
                         <a href="index.php?page=students" class="text-decoration-none small text-muted d-inline-flex align-items-center mb-2">
                             <i class="bi bi-arrow-left me-1"></i> Back to Students List
                         </a>
@@ -135,7 +135,10 @@
                                         <tr>
                                             <th>Course Name</th>
                                             <th>Code</th>
-                                            <th class="text-end">Action</th>
+                                            <?php
+                                if (Auth::isAdmin()): ?>
+                                                <th class="text-end">Action</th>
+                                            <?php endif; ?>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -145,13 +148,16 @@
                                                 <td>
                                                     <span class="badge bg-secondary"><?= htmlspecialchars($course['code'], ENT_QUOTES, 'UTF-8') ?></span>
                                                 </td>
-                                                <td class="text-end">
-                                                    <a href="index.php?page=enrollments&action=drop&student_id=<?= (int) $student['id'] ?>&course_id=<?= (int) $course['id'] ?>"
-                                                    class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Are you sure you want to drop this course?')">
-                                                        <i class="bi bi-x-circle"></i> Drop
-                                                    </a>
-                                                </td>
+                                                <?php
+                                    if (Auth::isAdmin()): ?>
+                                                    <td class="text-end">
+                                                        <a href="index.php?page=enrollments&action=drop&student_id=<?= (int) $student['id'] ?>&course_id=<?= (int) $course['id'] ?>"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Are you sure you want to drop this course?')">
+                                                            <i class="bi bi-x-circle"></i> Drop
+                                                        </a>
+                                                    </td>
+                                                <?php endif; ?>    
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>

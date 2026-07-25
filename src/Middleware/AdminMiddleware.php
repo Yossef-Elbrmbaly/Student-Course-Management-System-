@@ -17,4 +17,4 @@ class AdminMiddleware
             throw new UnauthorizedException('You are not authorized to access this page.');
         }
     }
-} 
+}
