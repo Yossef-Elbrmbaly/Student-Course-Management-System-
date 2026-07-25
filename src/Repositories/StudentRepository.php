@@ -51,7 +51,7 @@ class StudentRepository implements StudentRepositoryInterface
         string $email,
         string $phone,
         int $department_id
-    ): bool {
+    ): int {
         if (empty($name) || empty($email)) {
             throw new ValidationException('Name and Email are required.');
         }
@@ -62,12 +62,14 @@ class StudentRepository implements StudentRepositoryInterface
 
             $stmt = $this->connection->prepare($query);
 
-            return $stmt->execute([
+            $stmt->execute([
                 'name' => $name,
                 'email' => $email,
                 'phone' => $phone,
                 'department_id' => $department_id ?: null,
             ]);
+
+            return (int) $this->connection->lastInsertId();
 
         } catch (PDOException $e) {
             $errorCode = $e->errorInfo[1] ?? null;

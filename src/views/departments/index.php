@@ -18,7 +18,9 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
-
+            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
+                Logout
+            </a>            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>

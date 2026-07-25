@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Controllers\AuthController;
 use App\Controllers\CourseController;
 use App\Controllers\DepartmentController;
 use App\Controllers\EnrollmentController;
@@ -10,6 +11,7 @@ use App\Repositories\CourseRepository;
 use App\Repositories\DepartmentRepository;
 use App\Repositories\EnrollmentRepository;
 use App\Repositories\StudentRepository;
+use App\Repositories\UserRepository;
 use PDO;
 
 class AppFactory
@@ -19,7 +21,8 @@ class AppFactory
         return new StudentController(
             new StudentRepository($connection),
             new DepartmentRepository($connection),
-            new EnrollmentRepository($connection)
+            new EnrollmentRepository($connection),
+            new UserRepository($connection)
         );
     }
 
@@ -43,6 +46,13 @@ class AppFactory
             new EnrollmentRepository($connection),
             new StudentRepository($connection),
             new CourseRepository($connection)
+        );
+    }
+
+    public static function authController(PDO $connection): AuthController
+    {
+        return new AuthController(
+            new UserRepository($connection)
         );
     }
 }

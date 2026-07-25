@@ -8,7 +8,7 @@ interface StudentRepositoryInterface
 
     public function getById(int $id): ?array;
 
-    public function create(string $name, string $email, string $phone, int $department_id): bool;
+    public function create(string $name, string $email, string $phone, int $department_id): int;
 
     public function update(int $id, string $name, string $email, string $phone, int $department_id): bool;
 

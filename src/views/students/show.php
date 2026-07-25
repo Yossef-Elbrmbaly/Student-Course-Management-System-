@@ -11,36 +11,53 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" href="index.php">
+            <a class="navbar-brand fw-semibold d-flex align-items-center gap-2" 
+                href="<?= App\Core\Auth::isAdmin()
+                        ? 'index.php'
+                        : 'index.php?page=students&action=show&id=' . App\Core\Auth::studentId() ?>">
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
+            </a>
+            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
+                Logout
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="index.php?page=students">
-                            <i class="bi bi-people me-1"></i>Students
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=courses">
-                            <i class="bi bi-journal-bookmark me-1"></i>Courses
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=departments">
-                            <i class="bi bi-building me-1"></i>Departments
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=enrollments">
-                            <i class="bi bi-clipboard-check me-1"></i>Enrollments
-                        </a>
-                    </li>
-                </ul>
+
+                <?php
+
+                use App\Core\Auth;
+
+                if (Auth::isAdmin()): ?>                
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="index.php?page=students">
+                                <i class="bi bi-people me-1"></i>Students
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=courses">
+                                <i class="bi bi-journal-bookmark me-1"></i>Courses
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=departments">
+                                <i class="bi bi-building me-1"></i>Departments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=enrollments">
+                                <i class="bi bi-clipboard-check me-1"></i>Enrollments
+                            </a>
+                        </li>
+                    </ul>
+
+                <?php endif; ?>
+
+
             </div>
         </div>
     </nav>
@@ -49,14 +66,21 @@
 
         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
             <div>
-                <a href="index.php?page=students" class="text-decoration-none small text-muted d-inline-flex align-items-center mb-2">
-                    <i class="bi bi-arrow-left me-1"></i> Back to Students List
-                </a>
+
+                <?php
+                    if (Auth::isAdmin()): ?>
+                        <a href="index.php?page=students" class="text-decoration-none small text-muted d-inline-flex align-items-center mb-2">
+                            <i class="bi bi-arrow-left me-1"></i> Back to Students List
+                        </a>
+                <?php endif; ?>
                 <h2 class="mb-0">Student Profile</h2>
             </div>
-            <a href="index.php?page=students&action=edit&id=<?= (int) $student['id'] ?>" class="btn btn-warning shadow-sm">
-                <i class="bi bi-pencil-square me-1"></i>Edit Student
-            </a>
+            <?php
+            if (Auth::isAdmin()): ?>
+                <a href="index.php?page=students&action=edit&id=<?= (int) $student['id'] ?>" class="btn btn-warning shadow-sm">
+                    <i class="bi bi-pencil-square me-1"></i>Edit Student
+                </a>
+            <?php endif; ?>
         </div>
 
         <div class="row g-4">

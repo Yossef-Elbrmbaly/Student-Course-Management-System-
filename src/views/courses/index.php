@@ -18,7 +18,9 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
-
+            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
+                Logout
+            </a>
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -82,7 +84,7 @@
 
             <div class="card-body">
 
-                <table id="coursesTablecoursesTable" class="table table-striped table-hover align-middle">
+                <table id="coursesTable" class="table table-striped table-hover align-middle">
 
                     <thead class="table-dark">
                         <tr>
@@ -171,7 +173,7 @@
                     "lengthMenu": "Show _MENU_ entries"
                 }
             });
-            $('#studentsTable').wrap('<div class="table-responsive"></div>');
+            $('#coursesTable').wrap('<div class="table-responsive"></div>');
         });
     </script>
 </body>

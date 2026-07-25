@@ -5,16 +5,20 @@ namespace App\Controllers;
 use App\Contracts\DepartmentRepositoryInterface;
 use App\Contracts\EnrollmentRepositoryInterface;
 use App\Contracts\StudentRepositoryInterface;
+use App\Contracts\UserRepositoryInterface;
+use App\Core\Auth;
 use App\Core\BaseController;
 use App\Core\Request;
 use App\Exceptions\InvalidMethodException;
+use App\Exceptions\UnauthorizedException;
 
 class StudentController extends BaseController
 {
     public function __construct(
         private StudentRepositoryInterface $studentRepository,
         private DepartmentRepositoryInterface $departmentRepository,
-        private EnrollmentRepositoryInterface $enrollmentRepository
+        private EnrollmentRepositoryInterface $enrollmentRepository,
+        private UserRepositoryInterface $userRepository
     ) {
     }
 
@@ -29,11 +33,19 @@ class StudentController extends BaseController
     {
         $id = Request::queryInt('id');
 
+        if (!Auth::isAdmin() && Auth::studentId() !== $id) {
+            throw new UnauthorizedException(
+                'You are not authorized to view this student.'
+            );
+        }
+
         $student = $this->studentRepository->getById($id);
 
         $this->view('students/show', [
             'student' => $student,
-            'department' => $student['department_id'] ? $this->departmentRepository->getById((int) $student['department_id']) : null,
+            'department' => $student['department_id']
+                ? $this->departmentRepository->getById((int) $student['department_id'])
+                : null,
             'courses' => $this->enrollmentRepository->getStudentCourses($id),
         ]);
     }
@@ -51,11 +63,18 @@ class StudentController extends BaseController
             throw new InvalidMethodException('Only POST requests are allowed.');
         }
 
-        $this->studentRepository->create(
+        $studentId = $this->studentRepository->create(
             Request::input('name'),
             Request::input('email'),
             Request::input('phone'),
             Request::inputInt('department_id')
+        );
+
+        $this->userRepository->create(
+            $studentId,
+            Request::input('email'),
+            password_hash('123456', PASSWORD_DEFAULT),
+            'user'
         );
 
         $this->redirect();
@@ -76,6 +95,7 @@ class StudentController extends BaseController
         if (Request::method() !== 'POST') {
             throw new InvalidMethodException('Only POST requests are allowed.');
         }
+
         $this->studentRepository->update(
             Request::inputInt('id'),
             Request::input('name'),

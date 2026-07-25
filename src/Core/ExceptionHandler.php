@@ -4,6 +4,7 @@ namespace App\Core;
 
 use App\Exceptions\InvalidMethodException;
 use App\Exceptions\NotFoundException;
+use App\Exceptions\UnauthorizedException;
 use App\Exceptions\ValidationException;
 use Throwable;
 
@@ -17,10 +18,12 @@ class ExceptionHandler
             $exception instanceof ValidationException => [400, 'Validation Error'],
             $exception instanceof NotFoundException => [404, 'Not Found'],
             $exception instanceof InvalidMethodException => [405, 'Method Not Allowed'],
+            $exception instanceof UnauthorizedException => [403, 'Forbidden'],
             default => [500, 'Internal Server Error'],
         };
 
         http_response_code($statusCode);
+
         echo "<h2>{$title}</h2>";
 
         if ($debug) {

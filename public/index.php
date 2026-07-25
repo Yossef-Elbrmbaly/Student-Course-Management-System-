@@ -5,10 +5,14 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->safeLoad();
 
+session_start();
+
 use App\Config\Database;
 use App\Config\DatabaseConfig;
 use App\Core\AppFactory;
 use App\Core\ExceptionHandler;
+use App\Middleware\AdminMiddleware;
+use App\Middleware\AuthMiddleware;
 
 set_exception_handler([ExceptionHandler::class, 'handle']);
 
@@ -21,7 +25,22 @@ $connection = $database->connect();
 $page = $_GET['page'] ?? 'students';
 $action = $_GET['action'] ?? 'index';
 
-if ($page === 'departments') {
+if ($page === 'auth') {
+
+    $authController = AppFactory::authController($connection);
+
+    if ($action === 'login') {
+        $authController->login();
+    } elseif ($action === 'authenticate') {
+        $authController->authenticate();
+    } elseif ($action === 'logout') {
+        $authController->logout();
+    }
+
+} elseif ($page === 'departments') {
+
+    AuthMiddleware::handle();
+    AdminMiddleware::handle();
 
     $departmentController = AppFactory::departmentController($connection);
 
@@ -38,7 +57,11 @@ if ($page === 'departments') {
     } else {
         $departmentController->index();
     }
+
 } elseif ($page === 'courses') {
+
+    AuthMiddleware::handle();
+    AdminMiddleware::handle();
 
     $courseController = AppFactory::courseController($connection);
 
@@ -55,7 +78,11 @@ if ($page === 'departments') {
     } else {
         $courseController->index();
     }
+
 } elseif ($page === 'enrollments') {
+
+    AuthMiddleware::handle();
+    AdminMiddleware::handle();
 
     $enrollmentController = AppFactory::enrollmentController($connection);
 
@@ -70,6 +97,12 @@ if ($page === 'departments') {
     }
 
 } else {
+
+    AuthMiddleware::handle();
+
+    if ($action !== 'show') {
+        AdminMiddleware::handle();
+    }
 
     $studentController = AppFactory::studentController($connection);
 

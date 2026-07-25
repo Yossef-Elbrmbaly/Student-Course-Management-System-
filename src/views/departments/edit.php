@@ -15,6 +15,9 @@
                 <i class="bi bi-mortarboard-fill"></i>
                 Student Management System
             </a>
+            <a href="?page=auth&action=logout" class="btn btn-outline-danger">
+                Logout
+            </a>            
         </div>
     </nav>
 
