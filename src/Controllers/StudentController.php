@@ -12,7 +12,6 @@ use App\Core\Request;
 use App\Exceptions\UnauthorizedException;
 use App\Middleware\CsrfMiddleware;
 
-
 class StudentController extends BaseController
 {
     public function __construct(
@@ -107,7 +106,7 @@ class StudentController extends BaseController
     public function delete(): void
     {
         CsrfMiddleware::handle();
-        
+
         $id = Request::inputInt('id');
 
         $this->studentRepository->delete($id);
